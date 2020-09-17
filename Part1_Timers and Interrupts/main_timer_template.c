@@ -9,6 +9,7 @@
 
 #include "MK64F12.h"
 #include "uart.h"
+#include "led.h"
 //#include "isr.h"
 #include <stdio.h>
 
@@ -96,18 +97,8 @@ void initGPIO(void){
 	SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK;
 	SIM_SCGC5 |= SIM_SCGC5_PORTC_MASK;
 
-	//Configure Port Control Register for Inputs with pull enable and pull up resistor
-	
-	// Configure mux for Outputs
-
-
-	// Switch the GPIO pins to output mode (Red and Blue LEDs)
-
-
-	// Turn off the LEDs
-
-	// Set the push buttons as an input
-
+	// Initialize LEDs
+	LED_Init();
 
 	// interrupt configuration for SW3(Rising Edge) and SW2 (Either)
 	PORTA_PCR4 &= !PORT_PCR_IRQC_MASK;
