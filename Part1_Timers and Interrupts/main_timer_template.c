@@ -46,25 +46,38 @@ int main(void){
 void initPDB(void){
 	//Enable clock for PDB module
 	SIM_SCGC6 |= SIM_SCGC6_PDB_MASK;
-
+	
 	// Set continuous mode, prescaler of 128, multiplication factor of 20,
 	// software triggering, and PDB enabled
 	
+	// Contiuous mode set
+	PDB0_SC |= PDB_SC_CONT_MASK;
+	// Prescalar Set to 128 (111)
+	PDB0_SC &= !(PDB_SC_PRESCALER_MASK);
+	PDB0_SC |= PDB_SC_PRESCALER(7);
+	// Multiplication factor set (10)
+	PDB0_SC &= !(PDB_SC_MULT_MASK);
+	PDB0_SC |= PDB_SC_MULT(2);
+	// Software Triggering Reset
+	PDB0_SC |= PDB_SC_SWTRIG_MASK;
+	// Enable PDB
+	PDB0_SC |= PDB_SC_PDBEN_MASK;
 
 
 	//Set the mod field to get a 1 second period.
 	//There is a division by 2 to make the LED blinking period 1 second.
 	//This translates to two mod counts in one second (one for on, one for off)
-
+	PDB0_MOD &= !(PDB_MOD_MOD_MASK);
+	PDB0_MOD |= PDB_MOD_MOD(4001);
 
 	//Configure the Interrupt Delay register.
 	PDB0_IDLY = 10;
 
 	//Enable the interrupt mask.
-
+	PDB0_SC |= PDB_SC_PDBIE_MASK;
 
 	//Enable LDOK to have PDB0_SC register changes loaded.
-
+	PDB0_SC |= PDB_SC_LDOK_MASK;
 
 	return;
 }
