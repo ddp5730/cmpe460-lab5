@@ -20,6 +20,7 @@ void initPDB(void);
 void initGPIO(void);
 void initFTM(void);
 void initInterrupts(void);
+void Button_Init(void);
 
 int main(void){
 	//initializations
@@ -99,6 +100,8 @@ void initGPIO(void){
 
 	// Initialize LEDs
 	LED_Init();
+	Button_Init();
+	uart_init();
 
 	// interrupt configuration for SW3(Rising Edge) and SW2 (Either)
 	PORTA_PCR4 &= !PORT_PCR_IRQC_MASK;
@@ -119,4 +122,16 @@ void initInterrupts(void){
 	NVIC_EnableIRQ(FTM0_IRQn);
 
 	return;
+}
+
+void Button_Init(void){
+	// Enable clock for Port C PTC6 button
+	 SIM_SCGC5 |= SIM_SCGC5_PORTC_MASK;
+	
+	// Configure the Mux for the button
+	 PORTC_PCR6 |= PORT_PCR_MUX(1);
+
+	// Set the push button as an input
+	GPIOC_PDDR |= (GPIO_PDDR_INPUT << SW2_PIN_NUM);
+	 
 }
