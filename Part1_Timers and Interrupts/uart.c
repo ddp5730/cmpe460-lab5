@@ -7,12 +7,13 @@
  */
 
 #include "MK64F12.h"
+#include "uart.h"
 #define BAUD_RATE 9600      //default baud rate 
 #define SYS_CLOCK 20485760 //default system clock (see DEFAULT_SYSTEM_CLOCK  in system_MK64F12.c)
 
 #define UART_BDL_SIZE 8
 
-#include <string.h>
+#include <stdio.h>
 
 void uart_init()
 {

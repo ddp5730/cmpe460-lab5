@@ -90,7 +90,7 @@ void initFTM(void){
 	FTM0_MODE |= FTM_MODE_WPDIS_MASK;
 
 	//divide the input clock down by 128,
-	FTM0_SC |= FTM_SC_PS(0b001);
+	FTM0_SC |= FTM_SC_PS(1);
 
 	//reset the counter to zero
 	FTM0_CNT = 0;
@@ -103,7 +103,7 @@ void initFTM(void){
 	FTM0->MOD = (DEFAULT_SYSTEM_CLOCK/(1<<7))/1000;
 
 	//Select the System Clock
-	FTM0_SC |= FTM_SC_CLKS(0b01);
+	FTM0_SC |= FTM_SC_CLKS(1);
 
 	//Enable the interrupt mask. Timer overflow Interrupt enable
 	NVIC_EnableIRQ(FTM0_IRQn);
