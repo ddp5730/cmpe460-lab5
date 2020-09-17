@@ -85,16 +85,15 @@ void initPDB(void){
 void initFTM(void){
 	//Enable clock for FTM module (use FTM0)
 	SIM_SCGC6 |= SIM_SCGC6_FTM0_MASK;
-
-
+	
 	//turn off FTM Mode to  write protection;
-
+	FTM0_MODE |= FTM_MODE_WPDIS_MASK;
 
 	//divide the input clock down by 128,
-
+	FTM0_SC |= FTM_SC_PS(0b001);
 
 	//reset the counter to zero
-
+	FTM0_CNT = 0;
 
 	//Set the overflow rate
 	//(Sysclock/128)- clock after prescaler
@@ -104,10 +103,11 @@ void initFTM(void){
 	FTM0->MOD = (DEFAULT_SYSTEM_CLOCK/(1<<7))/1000;
 
 	//Select the System Clock
-
+	FTM0_SC |= FTM_SC_CLKS(0b01);
 
 	//Enable the interrupt mask. Timer overflow Interrupt enable
-
+	NVIC_EnableIRQ(FTM0_IRQn);
+	FTM0_SC |= FTM_SC_TOIE_MASK;
 
 	return;
 }

@@ -12,6 +12,8 @@
 
 #define UART_BDL_SIZE 8
 
+#include <string.h>
+
 void uart_init()
 {
 	//define variables for baud rate and baud rate fine adjust
@@ -90,10 +92,16 @@ void uart_putchar(char ch)
 
 }
 
+void uart_putnumU(int i)
+{
+	char buf[14];
+	sprintf(buf, "%d", i);
+	uart_put(buf);
+}
+
 void uart_put(char *ptr_str){
 	/*use putchar to print string*/
 	while (*ptr_str) {
 		uart_putchar(*(ptr_str++));
 	}
 }
-
