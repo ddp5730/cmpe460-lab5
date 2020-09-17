@@ -16,6 +16,14 @@
 /*From clock setup 0 in system_MK64f12.c*/
 #define DEFAULT_SYSTEM_CLOCK 20485760u /* Default System clock value */
 
+#define SW2_PIN_NUM 6
+#define SW3_PIN_NUM 4
+
+#define SW_DEPRESSED 0
+
+#define GPIO_PDDR_INPUT 0
+#define GPIO_PDDR_OUTPUT 1
+
 void initPDB(void);
 void initGPIO(void);
 void initFTM(void);
@@ -125,13 +133,16 @@ void initInterrupts(void){
 }
 
 void Button_Init(void){
-	// Enable clock for Port C PTC6 button
+	// Enable clock for SW2 -> PTC6 and SW3 -> PTA4
 	 SIM_SCGC5 |= SIM_SCGC5_PORTC_MASK;
+	 SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK;
 	
 	// Configure the Mux for the button
 	 PORTC_PCR6 |= PORT_PCR_MUX(1);
+	 PORTA_PCR4 |= PORT_PCR_MUX(1);
 
 	// Set the push button as an input
 	GPIOC_PDDR |= (GPIO_PDDR_INPUT << SW2_PIN_NUM);
+	GPIOA_PDDR |= (GPIO_PDDR_INPUT << SW3_PIN_NUM);
 	 
 }
