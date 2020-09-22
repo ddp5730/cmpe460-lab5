@@ -16,13 +16,12 @@
 /*From clock setup 0 in system_MK64f12.c*/
 #define DEFAULT_SYSTEM_CLOCK 20485760u /* Default System clock value */
 
+#define RESET "\r\nSuccessfully Reset\r\n"
+
 #define SW2_PIN_NUM 6
 #define SW3_PIN_NUM 4
 
 #define SW_DEPRESSED 0
-
-#define GPIO_PDDR_INPUT 0
-#define GPIO_PDDR_OUTPUT 1
 
 void initPDB(void);
 void initGPIO(void);
@@ -34,10 +33,10 @@ int main(void){
 	//initializations
 	initGPIO();
 	initPDB();
-	//initFTM();
-	//uart_init();
-	//initInterrupts();
+	initFTM();
+	uart_init();
 
+	uart_put(RESET);
 	
 	for(;;){
 		//To infinity and beyond
@@ -97,10 +96,10 @@ void initFTM(void){
 	FTM0_MODE |= FTM_MODE_WPDIS_MASK;
 
 	//divide the input clock down by 128,
-	FTM0_SC |= FTM_SC_PS(1);
+	FTM0_SC |= FTM_SC_PS(7); // Divide by 128 -> 111 -> 7
 
 	//reset the counter to zero
-	FTM0_CNT = 0;
+	FTM0_CNT = FTM_CNT_COUNT(0);
 
 	//Set the overflow rate
 	//(Sysclock/128)- clock after prescaler
@@ -110,7 +109,7 @@ void initFTM(void){
 	FTM0->MOD = (DEFAULT_SYSTEM_CLOCK/(1<<7))/1000;
 
 	//Select the System Clock
-	FTM0_SC |= FTM_SC_CLKS(1);
+	FTM0_SC |= FTM_SC_CLKS(1); // Option 1 for system clock
 
 	//Enable the interrupt mask. Timer overflow Interrupt enable
 	NVIC_EnableIRQ(FTM0_IRQn);
@@ -137,17 +136,9 @@ void initGPIO(void){
 	
 	PORTC_PCR6 &= ~PORT_PCR_IRQC_MASK;
 	PORTC_PCR6 |= PORT_PCR_IRQC(11); // Either edge interrupt
-
-	return;
-}
-
-void initInterrupts(void){
-	/*Can find these in MK64F12.h*/
-	// Enable NVIC for portA,portC, PDB0,FTM0
-	//NVIC_EnableIRQ(PORTA_IRQn);
-	//NVIC_EnableIRQ(PORTC_IRQn);
 	
-	//NVIC_EnableIRQ(FTM0_IRQn);
+	NVIC_EnableIRQ(PORTA_IRQn);
+	NVIC_EnableIRQ(PORTC_IRQn);
 
 	return;
 }
@@ -158,11 +149,13 @@ void Button_Init(void){
 	 SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK;
 	
 	// Configure the Mux for the button
-	 PORTC_PCR6 |= PORT_PCR_MUX(1);
-	 PORTA_PCR4 |= PORT_PCR_MUX(1);
+	PORTC_PCR6 &= ~PORT_PCR_MUX_MASK;
+	PORTC_PCR6 |= PORT_PCR_MUX(1);
+	PORTA_PCR4 &= ~PORT_PCR_MUX_MASK;
+	PORTA_PCR4 |= PORT_PCR_MUX(1);
 
 	// Set the push button as an input
-	GPIOC_PDDR |= (GPIO_PDDR_INPUT << SW2_PIN_NUM);
-	GPIOA_PDDR |= (GPIO_PDDR_INPUT << SW3_PIN_NUM);
+	GPIOC_PDDR &= ~(1 << SW2_PIN_NUM);
+	GPIOA_PDDR &= ~(1 << SW3_PIN_NUM);
 	 
 }

@@ -150,9 +150,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>72</LineNumber>
+          <LineNumber>34</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>2076</Address>
+          <Address>2328</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -161,14 +161,14 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\main_timer_template.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\p1_timers_and_interrupts\main_timer_template.c\72</Expression>
+          <Expression>\\p1_timers_and_interrupts\main_timer_template.c\34</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>36</LineNumber>
+          <LineNumber>148</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>2140</Address>
+          <Address>1396</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -177,23 +177,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\main_timer_template.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\p1_timers_and_interrupts\main_timer_template.c\36</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>20</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>1626</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\isr.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\p1_timers_and_interrupts\isr.c\20</Expression>
+          <Expression>\\p1_timers_and_interrupts\main_timer_template.c\148</Expression>
         </Bp>
       </Breakpoint>
       <Tracepoint>
@@ -240,7 +224,7 @@
       <pMultCmdsp></pMultCmdsp>
       <SystemViewers>
         <Entry>
-          <Name>System Viewer\PDB0</Name>
+          <Name>System Viewer\PORTA</Name>
           <WinId>35905</WinId>
         </Entry>
       </SystemViewers>
