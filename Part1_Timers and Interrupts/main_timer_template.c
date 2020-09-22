@@ -33,16 +33,10 @@ void Button_Init(void);
 int main(void){
 	//initializations
 	initGPIO();
-	//initPDB();
+	initPDB();
 	//initFTM();
 	//uart_init();
 	//initInterrupts();
-
-	toggle_LED_states(1, 0, 0);
-	delay();
-	toggle_LED_states(1, 0, 0);
-	delay();
-	toggle_LED_states(1, 0, 0);
 
 	
 	for(;;){
@@ -60,10 +54,10 @@ void initPDB(void){
 	// Contiuous mode set
 	PDB0_SC |= PDB_SC_CONT_MASK;
 	// Prescalar Set to 128 (111)
-	PDB0_SC &= !(PDB_SC_PRESCALER_MASK);
+	PDB0_SC &= ~(PDB_SC_PRESCALER_MASK);
 	PDB0_SC |= PDB_SC_PRESCALER(7);
 	// Multiplication factor set (10)
-	PDB0_SC &= !(PDB_SC_MULT_MASK);
+	PDB0_SC &= ~(PDB_SC_MULT_MASK);
 	PDB0_SC |= PDB_SC_MULT(2);
 	// Software Triggering Reset
 	PDB0_SC &= ~PDB_SC_TRGSEL_MASK;
@@ -75,8 +69,7 @@ void initPDB(void){
 	//Set the mod field to get a 1 second period.
 	//There is a division by 2 to make the LED blinking period 1 second.
 	//This translates to two mod counts in one second (one for on, one for off)
-	PDB0_MOD &= !(PDB_MOD_MOD_MASK);
-	PDB0_MOD |= PDB_MOD_MOD(4001);
+	PDB0_MOD = PDB_MOD_MOD(4001);	// Use equals sign since writing to buffer
 
 	//Configure the Interrupt Delay register.
 	PDB0_IDLY = 10;
@@ -139,10 +132,10 @@ void initGPIO(void){
 	uart_init();
 
 	// interrupt configuration for SW3(Rising Edge) and SW2 (Either)
-	PORTA_PCR4 &= !PORT_PCR_IRQC_MASK;
+	PORTA_PCR4 &= ~PORT_PCR_IRQC_MASK;
 	PORTA_PCR4 |= PORT_PCR_IRQC(9);	// Rising edge interrupt
 	
-	PORTC_PCR6 &= !PORT_PCR_IRQC_MASK;
+	PORTC_PCR6 &= ~PORT_PCR_IRQC_MASK;
 	PORTC_PCR6 |= PORT_PCR_IRQC(11); // Either edge interrupt
 
 	return;
