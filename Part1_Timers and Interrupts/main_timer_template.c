@@ -10,7 +10,7 @@
 #include "MK64F12.h"
 #include "uart.h"
 #include "led.h"
-//#include "isr.h"
+#include "isr.h"
 #include <stdio.h>
 
 /*From clock setup 0 in system_MK64f12.c*/
@@ -32,12 +32,19 @@ void Button_Init(void);
 
 int main(void){
 	//initializations
-	initPDB();
 	initGPIO();
-	initFTM();
-	uart_init();
-	initInterrupts();
+	//initPDB();
+	//initFTM();
+	//uart_init();
+	//initInterrupts();
 
+	toggle_LED_states(1, 0, 0);
+	delay();
+	toggle_LED_states(1, 0, 0);
+	delay();
+	toggle_LED_states(1, 0, 0);
+
+	
 	for(;;){
 		//To infinity and beyond
 	}
@@ -59,7 +66,8 @@ void initPDB(void){
 	PDB0_SC &= !(PDB_SC_MULT_MASK);
 	PDB0_SC |= PDB_SC_MULT(2);
 	// Software Triggering Reset
-	PDB0_SC |= PDB_SC_SWTRIG_MASK;
+	PDB0_SC &= ~PDB_SC_TRGSEL_MASK;
+	PDB0_SC |= PDB_SC_TRGSEL(15); // Software trigger is selected
 	// Enable PDB
 	PDB0_SC |= PDB_SC_PDBEN_MASK;
 
@@ -72,13 +80,19 @@ void initPDB(void){
 
 	//Configure the Interrupt Delay register.
 	PDB0_IDLY = 10;
-
+	
 	//Enable the interrupt mask.
 	PDB0_SC |= PDB_SC_PDBIE_MASK;
-
-	//Enable LDOK to have PDB0_SC register changes loaded.
+	
+	// Enable LDOK to have PDB0_SC register changes loaded.
 	PDB0_SC |= PDB_SC_LDOK_MASK;
-
+	
+	// Initialize PDB0 Interrupts
+	NVIC_EnableIRQ(PDB0_IRQn);
+	
+	// Start the timer with a software trigger
+	PDB0_SC |= PDB_SC_SWTRIG_MASK;
+	
 	return;
 }
 
@@ -137,10 +151,10 @@ void initGPIO(void){
 void initInterrupts(void){
 	/*Can find these in MK64F12.h*/
 	// Enable NVIC for portA,portC, PDB0,FTM0
-	NVIC_EnableIRQ(PORTA_IRQn);
-	NVIC_EnableIRQ(PORTC_IRQn);
-	NVIC_EnableIRQ(PDB0_IRQn);
-	NVIC_EnableIRQ(FTM0_IRQn);
+	//NVIC_EnableIRQ(PORTA_IRQn);
+	//NVIC_EnableIRQ(PORTC_IRQn);
+	
+	//NVIC_EnableIRQ(FTM0_IRQn);
 
 	return;
 }
