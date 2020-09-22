@@ -11,7 +11,9 @@
 #define SW2_PIN_NUM 6
 #define SW3_PIN_NUM 4
 
-#define TEST "SW3 Interrupt triggered\r\n"
+#define SW3_INTERRUPT "SW3 Interrupt triggered\r\n"
+#define SW2_PRESSED "SW2 button pressed\r\n"
+
 
 //variables global to the IRQ handlers which dictates if timer is enabled &  timer counter
 int sw2en;
@@ -40,9 +42,7 @@ void FTM0_IRQHandler(void){ //For FTM timer
 // SW3 toggles whether or not the blinking LED is toggled
 void PORTA_IRQHandler(void){ //For switch 3
 	
-	
-	
-	uart_put(TEST);
+	uart_put(SW3_INTERRUPT);
 	
 	
 	// Check if interrupt is detected
@@ -67,26 +67,38 @@ void PORTA_IRQHandler(void){ //For switch 3
 	
 // SW2 times how long it is depressed for and prints the results over UART.
 void PORTC_IRQHandler(void){ //For switch 2
-	
-	/*
-	if(PORTA_ISFR & (1 << SW3_PIN_NUM))
+		
+	if(PORTC_ISFR & (1 << SW2_PIN_NUM))
 	{
 		
-		PORTA_ISFR |= 1 << SW3_PIN_NUM;
-		if(FTM0_SC & FTM_SC_CLKS)
+		PORTC_ISFR |= 1 << SW2_PIN_NUM;
+		if(FTM0_SC & FTM_SC_CLKS_MASK)
 		{
+			
+			// Device was enabled
 			FTM0_SC &= ~FTM_SC_CLKS_MASK;
+			FTM0_SC |= FTM_SC_CLKS(0);
 			sw2en = 0;
+			
+			// Print out result to display (in milliseconds)
+			char out_str[100];
+			
+			sprintf(out_str, "Button SW2 was held down for %d ms\r\n", sw2_counter);
+			uart_put(out_str);
 		}
 		else
 		{
-			FTM0_SC |= FTM_SC_CLKS(0b01);
-			FTM0_SYNC |= 
+			// Device was disabled
+			
+			uart_put(SW2_PRESSED);
+			
+			FTM0_SC &= ~FTM_SC_CLKS_MASK;
+			FTM0_SC |= FTM_SC_CLKS(1);
 			sw2en = 1;
 			sw2_counter = 0;
 		}
 	}
-	*/
+	
 	
 	return;
 }
