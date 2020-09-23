@@ -31,20 +31,25 @@ void LED_Init(void){
 	 
 
 	// Turn off the LEDs
-	set_LED_states(LED_OFF, LED_OFF, LED_OFF);
+	clear_LED_states();
    
 }
 
 void set_LED_states(int red_set, int blue_set, int green_set) {
-	clear_LED_states();
-	
-	GPIOB_PDOR |= (red_set << LED_RED_PIN_NUM) | (blue_set << LED_BLUE_PIN_NUM);
-	GPIOE_PDOR |= (green_set << LED_GREEN_PIN_NUM);
+	// 0 on GPIO pin turns LED on.
+	GPIOB_PCOR = (red_set << LED_RED_PIN_NUM) | (blue_set << LED_BLUE_PIN_NUM);
+	GPIOE_PCOR = (green_set << LED_GREEN_PIN_NUM);
+}
+
+void toggle_LED_states(int red_t, int blue_t, int green_t){
+	GPIOB_PTOR = (red_t << LED_RED_PIN_NUM) | (blue_t << LED_BLUE_PIN_NUM);
+	GPIOE_PTOR = (green_t << LED_GREEN_PIN_NUM);
 }
 
 void clear_LED_states() {
-	GPIOB_PDOR &= (0 << LED_RED_PIN_NUM) | (0 << LED_BLUE_PIN_NUM);
-	GPIOE_PDOR &= (0 << LED_GREEN_PIN_NUM);
+	// 1 on GPIO pin turns LED off.
+	GPIOB_PDOR = (1 << LED_RED_PIN_NUM) | (1 << LED_BLUE_PIN_NUM);
+	GPIOE_PDOR = (1 << LED_GREEN_PIN_NUM);
 }
 
 void delay(void) {

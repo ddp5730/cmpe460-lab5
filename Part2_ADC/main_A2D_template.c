@@ -77,7 +77,7 @@ void DAC0_INIT(void) {
     DAC0_C0 = DAC_C0_DACEN_MASK | DAC_C0_DACRFS_MASK;
     DAC0_C1 = 0;
 }
- 
+
 int main(void) {
     int i; char str[100];
    

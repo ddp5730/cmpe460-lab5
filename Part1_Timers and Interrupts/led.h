@@ -30,6 +30,15 @@ void LED_Init(void);
 */
 void set_LED_states(int red_set, int blue_set, int green_set);
 
+/*
+	Toggles the state for all LEDs based on boolean parameters.  Must be called
+	after LED_init()
+
+	red_t: int (0 or 1); if set -> toggle LED.  if clear -> do nothing
+	etc.
+*/
+void toggle_LED_states(int red_t, int blue_t, int green_t);
+
 void clear_LED_states(void);
 /*
 	Function that adds an integer to the INCREMENT_DELAY value to add
