@@ -15,7 +15,7 @@
 void PDB_INIT(void) {
     //Enable PDB Clock
     SIM_SCGC6 |= SIM_SCGC6_PDB_MASK;
-    PDB0_CNT = 0x0000;
+    //PDB0_CNT = 0x0000;
     PDB0_MOD = 50000; // 50,000,000 / 50,000 = 1000
 
     PDB0_SC = PDB_SC_PDBEN_MASK | PDB_SC_CONT_MASK | PDB_SC_TRGSEL(0xf)
@@ -34,10 +34,12 @@ void ADC1_INIT(void) {
     // Configure CFG Registers
     // Configure ADC to divide 50 MHz down to 6.25 MHz AD Clock, 16-bit single ended
     //(Insert your code here.)
+		ADC1_CFG1 = ADC_CFG1_ADIV(0x3) | ADC_CFG1_MODE(0x3);
  
     // Do ADC Calibration for Singled Ended ADC. Do not touch.
     ADC1_SC3 = ADC_SC3_CAL_MASK;
     while ( (ADC1_SC3 & ADC_SC3_CAL_MASK) != 0 );
+
     calib = ADC1_CLP0;
     calib += ADC1_CLP1;
     calib += ADC1_CLP2;
@@ -51,15 +53,18 @@ void ADC1_INIT(void) {
     // Configure SC registers.
     // Select hardware trigger.
     //(Insert your code here.)
- 
+		ADC1_SC2 = ADC_SC2_ADTRG_MASK;
  
     // Configure SC1A register.
     // Select ADC Channel and enable interrupts. Use ADC1 channel DADP3  in single ended mode.
     //(Insert your code here.)
- 
+		
+		//ADC1_SC1A = ADC_SC1_ADCH(0x03) | ADC_SC1_AIEN_MASK;	 //lab manual wants DADP0, but comments want DADP3??
+		ADC1_SC1A = ADC_SC1_ADCH(0x00) | ADC_SC1_AIEN_MASK;
  
     // Enable NVIC interrupt
     //(Insert your code here.)
+		NVIC_EnableIRQ(ADC1_IRQn);
 }
  
 // ADC1 Conversion Complete ISR
@@ -69,6 +74,8 @@ void ADC1_IRQHandler(void) {
 
     //Set DAC output value (12bit)
     //(Insert your code here.)
+		DAC0_DAT0H = i >> 8;
+		DAC0_DAT0L = i;
 }
 
 void DAC0_INIT(void) {
@@ -86,6 +93,7 @@ int main(void) {
    
     // Initialize UART
     //(Insert your code here.)
+		uart_init();
                
     DAC0_INIT();
     ADC1_INIT();
