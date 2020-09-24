@@ -101,6 +101,7 @@ int main(void)
 void ADC0_IRQHandler(void) {
 	// Reading ADC0_RA clears the conversion complete flag
 	//INSERT CODE HERE
+	ADC0VAL = ADC1_RA;
 	
 }
 
@@ -114,10 +115,12 @@ void ADC0_IRQHandler(void) {
 */
 void FTM2_IRQHandler(void){ //For FTM timer
 	// Clear interrupt
-  	//INSERT CODE HERE
+ 	//INSERT CODE HERE
+	FTM2_SC &= ~FTM_SC_TOF_MASK;
 	
 	// Toggle clk
 	//INSERT CODE HERE
+	
 	
 	// Line capture logic
 	if ((pixcnt >= 2) && (pixcnt < 256)) {
@@ -163,9 +166,13 @@ void PIT0_IRQHandler(void){
 	}
 	// Clear interrupt
 	//INSERT CODE HERE
+	PIT_TFLG0 |= PIT_TFLG_TIF_MASK;
+	
 	
 	// Setting mod resets the FTM counter
 	//INSERT CODE HERE
+	FTM2_
+	
 	
 	// Enable FTM2 interrupts (camera)
 	//INSERT CODE HERE
@@ -258,6 +265,18 @@ void init_PIT(void){
 void init_GPIO(void){
 	// Enable LED and GPIO so we can see results
 	//INSERT CODE HERE
+	SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTE_MASK;
+	
+	PORTB_PCR22 = PORT_PCR_MUX(1);
+	PORTB_PCR21 = PORT_PCR_MUX(1);
+	PORTE_PCR26 = PORT_PCR_MUX(1);
+	
+	GPIOB_PDDR |= (1 << 22) | (1 << 21);
+	GPIOE_PDDR |= (1 << 26);
+	
+	GPIOB_PSOR = (1 << 22) | (1 << 21);
+	GPIOE_PSOR = (1 << 26);
+	
 	return;
 }
 
@@ -295,5 +314,6 @@ void init_ADC0(void) {
 	//INSERT CODE HERE // Pretrigger A
 	
 	// Enable NVIC interrupt
-    //INSERT CODE HERE
+  //INSERT CODE HERE
+	NVIC_EnableIRQ(ADC0_IRQn);
 }
