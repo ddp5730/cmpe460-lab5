@@ -263,26 +263,31 @@ void init_GPIO(void){
 
 /* Set up ADC for capturing camera data */
 void init_ADC0(void) {
-    unsigned int calib;
-    // Turn on ADC0
-    //INSERT CODE HERE
+	unsigned int calib;
+	// Turn on ADC0
+	//INSERT CODE HERE
+	SIM_SCGC6 |= SIM_SCGC6_ADC0_MASK;
 	
 	// Single ended 16 bit conversion, no clock divider
 	//INSERT CODE HERE
+	ADC0_CFG1 = ADC_CFG1_MODE(0x3);
     
-    // Do ADC Calibration for Singled Ended ADC. Do not touch.
-    ADC0_SC3 = ADC_SC3_CAL_MASK;
-    while ( (ADC0_SC3 & ADC_SC3_CAL_MASK) != 0 );
-    calib = ADC0_CLP0; calib += ADC0_CLP1; calib += ADC0_CLP2;
-    calib += ADC0_CLP3; calib += ADC0_CLP4; calib += ADC0_CLPS;
-    calib = calib >> 1; calib |= 0x8000;
-    ADC0_PG = calib;
-    
-    // Select hardware trigger.
-    //INSERT CODE HERE
-    
-    // Set to single ended mode	
+	// Do ADC Calibration for Singled Ended ADC. Do not touch.
+	ADC0_SC3 = ADC_SC3_CAL_MASK;
+	while ( (ADC0_SC3 & ADC_SC3_CAL_MASK) != 0 );
+	calib = ADC0_CLP0; calib += ADC0_CLP1; calib += ADC0_CLP2;
+	calib += ADC0_CLP3; calib += ADC0_CLP4; calib += ADC0_CLPS;
+	calib = calib >> 1; calib |= 0x8000;
+	ADC0_PG = calib;
+	
+	// Select hardware trigger.
 	//INSERT CODE HERE
+	ADC0_SC2 = ADC_SC2_ADTRG_MASK;
+	
+	// Set to single ended mode	
+	//INSERT CODE HERE
+	ADC0_SC1A = ADC_SC1_ADCH(0x0);
+	
 	
 	// Set up FTM2 trigger on ADC0
 	//INSERT CODE HERE // FTM2 select
