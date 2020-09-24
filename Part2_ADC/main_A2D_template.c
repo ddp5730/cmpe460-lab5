@@ -103,7 +103,14 @@ int main(void) {
     PDB0_SC |= PDB_SC_SWTRIG_MASK;
  
     for(;;) {
+#if 1
 		sprintf(str,"\n Decimal: %d Hexadecimal: %x \n\r",ADC1_RA,ADC1_RA);
+#else
+		float raw = ADC1_RA;
+		float c = ((raw * (3.3/0xffff)) - 0.5) / 0.01;
+		float f = c * 9/5 + 32;
+		sprintf(str,"\n C: %f F: %f\n\r",c,f);	
+#endif
 		uart_put(str);
 		for( i=0; i < 5000000; ++i ){
                        
