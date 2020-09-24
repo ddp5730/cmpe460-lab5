@@ -146,6 +146,7 @@ void FTM2_IRQHandler(void){ //For FTM timer
 		// Disable FTM2 interrupts (until PIT0 overflows
 		//   again and triggers another line capture)
 		//INSERT CODE HERE
+		FTM2_SC &= ~FTM_SC_TOIE_MASK;
 	
 	}
 	return;
@@ -171,11 +172,13 @@ void PIT0_IRQHandler(void){
 	
 	// Setting mod resets the FTM counter
 	//INSERT CODE HERE
-	FTM2_
+	FTM2_MOD = 0;		//should we reset mod, or just set FTM0_CNT to 0
+	//FTM2_CNT = FTM_CNT_COUNT(0);
 	
 	
 	// Enable FTM2 interrupts (camera)
 	//INSERT CODE HERE
+	FTM2_SC |= FTM_SC_TOIE_MASK;
 	
 	return;
 }
@@ -185,18 +188,23 @@ void PIT0_IRQHandler(void){
 void init_FTM2(){
 	// Enable clock
 	//INSERT CODE HERE
+	SIM_SCGC3 |= SIM_SCGC3_FTM2_MASK;
 
 	// Disable Write Protection
 	//INSERT CODE HERE
+	FTM2_MODE |= FTM_MODE_WPDIS_MASK;
 	
 	// Set output to '1' on init
 	//INSERT CODE HERE
 	
+	
 	// Initialize the CNT to 0 before writing to MOD
 	//INSERT CODE HERE
+	FTM2_CNT = FTM_CNT_COUNT(0);
 	
 	// Set the Counter Initial Value to 0
 	//INSERT CODE HERE
+	FTM2_CNTIN = 0;
 	
 	// Set the period (~10us)
 	//INSERT CODE HERE
@@ -214,14 +222,18 @@ void init_FTM2(){
 	// Enable hardware trigger from FTM2
 	//INSERT CODE HERE
 	
+	
 	// Don't enable interrupts yet (disable)
 	//INSERT CODE HERE
+	//FTM2_SC &= ~FTM_SC_TOIE_MASK;
 	
 	// No prescalar, system clock
 	//INSERT CODE HERE
+	FTM2_SC = FTM_SC_PS(0);
 	
 	// Set up interrupt
 	//INSERT CODE HERE
+	NVIC_EnableIRQ(FTM2_IRQn);
 	
 	return;
 }
