@@ -22,7 +22,7 @@ function plot_cameras_serial_blank
 serialPort = 'COM3';
 serialObject = serial(serialPort);
 %configure serial connection
-serialObject.BaudRate = 115200; %(Default)
+serialObject.BaudRate = 9600; %(Default)
 %serialObject.BaudRate = 115200;
 %serialObject.FlowControl = 'software';
 
@@ -99,7 +99,7 @@ end
 drawnow;
 subplot(4,2,cam+4);
 %figure(binfighand);
-plot(bintrace);
+plot(smoothtrace);
 
 end %function
 
