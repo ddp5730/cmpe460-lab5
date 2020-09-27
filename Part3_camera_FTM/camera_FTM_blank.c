@@ -237,7 +237,7 @@ void init_PIT(void){
 	
 	// Enable clock for timers
 	SIM_SCGC6 |= SIM_SCGC6_PIT_MASK;
-	PIT_MCR |= PIT_MCR_MDIS_MASK;
+	PIT_MCR &= ~PIT_MCR_MDIS_MASK;
 	
 	// Enable timers to continue in debug mode
 	PIT_MCR &= ~PIT_MCR_FRZ_MASK; // In case you need to debug
@@ -245,9 +245,11 @@ void init_PIT(void){
 	// PIT clock frequency is the system clock
 	// Load the value that the timer will count down from
 	PIT_LDVAL0 = PIT_LDVAL_TSV((80 / 1000) * DEFAULT_SYSTEM_CLOCK);
+	//PIT_LDVAL0 = PIT_LDVAL_TSV(50);
 	// Restart Timer
-	PIT_MCR &= ~PIT_MCR_MDIS_MASK;
-	PIT_MCR |= PIT_MCR_MDIS_MASK;
+	//PIT_MCR |= PIT_MCR_MDIS_MASK;
+	//PIT_MCR &= ~PIT_MCR_MDIS_MASK;
+	
 	
 	// Enable timer interrupts
 	PIT_TCTRL0 |= PIT_TCTRL_TIE_MASK;

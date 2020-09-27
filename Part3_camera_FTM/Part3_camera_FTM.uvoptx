@@ -150,9 +150,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>185</LineNumber>
+          <LineNumber>76</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>2300</Address>
+          <Address>2984</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -161,14 +161,14 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\camera_FTM_blank.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Part3_camera_FTM\camera_FTM_blank.c\185</Expression>
+          <Expression>\\Part3_camera_FTM\camera_FTM_blank.c\76</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>246</LineNumber>
+          <LineNumber>239</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>2912</Address>
+          <Address>2878</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -177,23 +177,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\camera_FTM_blank.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Part3_camera_FTM\camera_FTM_blank.c\246</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>202</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>2682</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\camera_FTM_blank.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Part3_camera_FTM\camera_FTM_blank.c\202</Expression>
+          <Expression>\\Part3_camera_FTM\camera_FTM_blank.c\239</Expression>
         </Bp>
       </Breakpoint>
       <Tracepoint>
