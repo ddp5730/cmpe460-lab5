@@ -62,7 +62,7 @@ uint16_t line[128];
 
 // These variables are for streaming the camera
 //	 data over UART
-int debugcamdata = 0;
+int debugcamdata = 1;
 int capcnt = 0;
 char str[100];
 
@@ -84,10 +84,11 @@ int main(void)
 	uart_put(NL);
 	
 	for(;;) {
-/*
+
 		if (debugcamdata) {
 			// Every 2 seconds
 			//if (capcnt >= (2/INTEGRATION_TIME)) {
+			int tempVar = capcnt;
 			if (capcnt >= (500)) {
 				GPIOB_PCOR |= (1 << 22);
 				// send the array over uart
@@ -102,7 +103,7 @@ int main(void)
 				capcnt = 0;
 				GPIOB_PSOR |= (1 << 22);
 			}
-		}*/
+		}
 
 	} //for
 } //main
@@ -167,7 +168,12 @@ void FTM2_IRQHandler(void){ //For FTM timer
 		pixcnt = -2; // reset counter
 		// Disable FTM2 interrupts (until PIT0 overflows
 		//   again and triggers another line capture)
+<<<<<<< HEAD
 		//FTM2_SC &= ~FTM_SC_TOIE_MASK;
+=======
+		FTM2_SC &= ~FTM_SC_TOIE_MASK;
+	
+>>>>>>> a411703524220da9e1b6cfc8f033f8d0b445923d
 	}
 	return;
 }
@@ -186,18 +192,14 @@ void PIT0_IRQHandler(void){
 		capcnt += 1;
 	}
 	// Clear interrupt
-	//INSERT CODE HERE
 	PIT_TFLG0 |= PIT_TFLG_TIF_MASK;
 	
 	
 	// Setting mod resets the FTM counter
-	//INSERT CODE HERE
-	FTM2_MOD = 0;		//should we reset mod, or just set FTM0_CNT to 0
-	//FTM2_CNT = FTM_CNT_COUNT(0);
+	FTM2_CNT = FTM_CNT_COUNT(0);
 	
 	
 	// Enable FTM2 interrupts (camera)
-	//INSERT CODE HERE
 	FTM2_SC |= FTM_SC_TOIE_MASK;
 	
 	return;
@@ -244,25 +246,29 @@ void init_PIT(void){
 	
 	// Enable clock for timers
 	SIM_SCGC6 |= SIM_SCGC6_PIT_MASK;
+	PIT_MCR |= PIT_MCR_MDIS_MASK;
 	
 	// Enable timers to continue in debug mode
-	//INSERT CODE HERE // In case you need to debug
+	PIT_MCR &= ~PIT_MCR_FRZ_MASK; // In case you need to debug
 	
 	// PIT clock frequency is the system clock
 	// Load the value that the timer will count down from
-	//INSERT CODE HERE
+	PIT_LDVAL0 = PIT_LDVAL_TSV((80 / 1000) * DEFAULT_SYSTEM_CLOCK);
+	// Restart Timer
+	PIT_MCR &= ~PIT_MCR_MDIS_MASK;
+	PIT_MCR |= PIT_MCR_MDIS_MASK;
 	
 	// Enable timer interrupts
-	//INSERT CODE HERE
+	PIT_TCTRL0 |= PIT_TCTRL_TIE_MASK;
 	
 	// Enable the timer
-	//INSERT CODE HERE
+	PIT_TCTRL0 |= PIT_TCTRL_TEN_MASK;
 
 	// Clear interrupt flag
-	//INSERT CODE HERE
+	PIT_TFLG0 |= PIT_TFLG_TIF_MASK;
 
 	// Enable PIT interrupt in the interrupt controller
-	//INSERT CODE HERE
+	NVIC_EnableIRQ(PIT0_IRQn);
 	return;
 }
 

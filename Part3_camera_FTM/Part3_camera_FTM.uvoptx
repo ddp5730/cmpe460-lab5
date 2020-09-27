@@ -150,9 +150,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>210</LineNumber>
+          <LineNumber>185</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>2210</Address>
+          <Address>2300</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -161,14 +161,14 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\camera_FTM_blank.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Part3_camera_FTM\camera_FTM_blank.c\210</Expression>
+          <Expression>\\Part3_camera_FTM\camera_FTM_blank.c\185</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>201</LineNumber>
+          <LineNumber>246</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>1846</Address>
+          <Address>2912</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -177,39 +177,23 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\camera_FTM_blank.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Part3_camera_FTM\camera_FTM_blank.c\201</Expression>
+          <Expression>\\Part3_camera_FTM\camera_FTM_blank.c\246</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>198</LineNumber>
+          <LineNumber>202</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
+          <Address>2682</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
+          <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\camera_FTM_blank.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>207</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>.\camera_FTM_blank.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\Part3_camera_FTM\camera_FTM_blank.c\202</Expression>
         </Bp>
       </Breakpoint>
       <Tracepoint>
@@ -258,6 +242,10 @@
         <Entry>
           <Name>System Viewer\FTM2</Name>
           <WinId>35905</WinId>
+        </Entry>
+        <Entry>
+          <Name>System Viewer\PIT</Name>
+          <WinId>35903</WinId>
         </Entry>
         <Entry>
           <Name>System Viewer\SIM</Name>
