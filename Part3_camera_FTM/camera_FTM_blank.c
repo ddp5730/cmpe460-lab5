@@ -248,12 +248,8 @@ void init_PIT(void){
 	
 	// PIT clock frequency is the system clock
 	// Load the value that the timer will count down from
-	PIT_LDVAL0 = PIT_LDVAL_TSV((80 / 1000) * DEFAULT_SYSTEM_CLOCK);
-	//PIT_LDVAL0 = PIT_LDVAL_TSV(50);
-	// Restart Timer
-	//PIT_MCR |= PIT_MCR_MDIS_MASK;
-	//PIT_MCR &= ~PIT_MCR_MDIS_MASK;
-	
+	PIT_LDVAL0 = PIT_LDVAL_TSV((80.0 / 1000) * DEFAULT_SYSTEM_CLOCK);
+	//PIT_LDVAL0 = PIT_LDVAL_TSV(1638861);
 	
 	// Enable timer interrupts
 	PIT_TCTRL0 |= PIT_TCTRL_TIE_MASK;

@@ -150,9 +150,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>76</LineNumber>
+          <LineNumber>190</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>2984</Address>
+          <Address>2344</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -161,14 +161,14 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\camera_FTM_blank.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Part3_camera_FTM\camera_FTM_blank.c\76</Expression>
+          <Expression>\\Part3_camera_FTM\camera_FTM_blank.c\190</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>239</LineNumber>
+          <LineNumber>243</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>2878</Address>
+          <Address>2910</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -177,7 +177,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\camera_FTM_blank.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Part3_camera_FTM\camera_FTM_blank.c\239</Expression>
+          <Expression>\\Part3_camera_FTM\camera_FTM_blank.c\243</Expression>
         </Bp>
       </Breakpoint>
       <Tracepoint>
@@ -224,16 +224,8 @@
       <pMultCmdsp></pMultCmdsp>
       <SystemViewers>
         <Entry>
-          <Name>System Viewer\FTM2</Name>
-          <WinId>35905</WinId>
-        </Entry>
-        <Entry>
           <Name>System Viewer\PIT</Name>
-          <WinId>35903</WinId>
-        </Entry>
-        <Entry>
-          <Name>System Viewer\SIM</Name>
-          <WinId>35904</WinId>
+          <WinId>35905</WinId>
         </Entry>
       </SystemViewers>
     </TargetOption>
