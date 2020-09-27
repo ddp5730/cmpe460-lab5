@@ -37,6 +37,12 @@
 //	(camera clk is the mod value set in FTM2)
 #define INTEGRATION_TIME .0075f
 
+#define CLK_PIN_NUM 9
+#define SI_PIN_NUM 23
+
+#define NL "\r\n"
+#define RESET "Camera Program Started"
+
 void init_FTM2(void);
 void init_GPIO(void);
 void init_PIT(void);
@@ -73,8 +79,12 @@ int main(void)
 	init_ADC0();
 	init_PIT();	// To trigger camera read based on integration time
 	
+	uart_put(NL);
+	uart_put(RESET);
+	uart_put(NL);
+	
 	for(;;) {
-
+/*
 		if (debugcamdata) {
 			// Every 2 seconds
 			//if (capcnt >= (2/INTEGRATION_TIME)) {
@@ -92,7 +102,7 @@ int main(void)
 				capcnt = 0;
 				GPIOB_PSOR |= (1 << 22);
 			}
-		}
+		}*/
 
 	} //for
 } //main
@@ -116,13 +126,24 @@ void ADC0_IRQHandler(void) {
 */
 void FTM2_IRQHandler(void){ //For FTM timer
 	// Clear interrupt
- 	//INSERT CODE HERE
 	FTM2_SC &= ~FTM_SC_TOF_MASK;
 	
 	// Toggle clk
-	//INSERT CODE HERE
+	if (clkval) {
+		// Clock is high; set low
+		GPIOB_PCOR = (1 << CLK_PIN_NUM);
+		clkval = !clkval;
+		uart_put("Clock High");
+	}
+	else {
+		// Clock is low; set high
+		GPIOB_PSOR = (1 << CLK_PIN_NUM);
+		clkval = !clkval;
+		uart_put("\tClock Low");
+		uart_put(NL);
+	}
 	
-	
+	/*
 	// Line capture logic
 	if ((pixcnt >= 2) && (pixcnt < 256)) {
 		if (!clkval) {	// check for falling edge
@@ -133,15 +154,15 @@ void FTM2_IRQHandler(void){ //For FTM timer
 		pixcnt += 1;
 	} else if (pixcnt < 2) {
 		if (pixcnt == -1) {
-			GPIOB_PSOR |= (1 << 23); // SI = 1
+			GPIOB_PSOR |= (1 << SI_PIN_NUM); // SI = 1
 		} else if (pixcnt == 1) {
-			GPIOB_PCOR |= (1 << 23); // SI = 0
+			GPIOB_PCOR |= (1 << SI_PIN_NUM); // SI = 0
 			// ADC read
 			line[0] = ADC0VAL;
 		} 
 		pixcnt += 1;
 	} else {
-		GPIOB_PCOR |= (1 << 9); // CLK = 0
+		GPIOB_PCOR |= (1 << CLK_PIN_NUM); // CLK = 0
 		clkval = 0; // make sure clock variable = 0
 		pixcnt = -2; // reset counter
 		// Disable FTM2 interrupts (until PIT0 overflows
@@ -150,6 +171,7 @@ void FTM2_IRQHandler(void){ //For FTM timer
 		FTM2_SC &= ~FTM_SC_TOIE_MASK;
 	
 	}
+	*/
 	return;
 }
 
@@ -188,53 +210,31 @@ void PIT0_IRQHandler(void){
 /* Initialization of FTM2 for camera */
 void init_FTM2(){
 	// Enable clock
-	//INSERT CODE HERE
+	SIM_SCGC6 |= SIM_SCGC6_FTM2_MASK;
 	SIM_SCGC3 |= SIM_SCGC3_FTM2_MASK;
 
 	// Disable Write Protection
-	//INSERT CODE HERE
 	FTM2_MODE |= FTM_MODE_WPDIS_MASK;
 	
-	// Set output to '1' on init
-	//INSERT CODE HERE
-	
+	//divide the input clock down 1
+	FTM2_SC |= FTM_SC_PS(0);
 	
 	// Initialize the CNT to 0 before writing to MOD
-	//INSERT CODE HERE
 	FTM2_CNT = FTM_CNT_COUNT(0);
 	
-	// Set the Counter Initial Value to 0
-	//INSERT CODE HERE
-	FTM2_CNTIN = 0;
-	
-	// Set the period (~10us)
-	//INSERT CODE HERE
-	
-	// 50% duty
-	//INSERT CODE HERE
-	
-	// Set edge-aligned mode
-	//INSERT CODE HERE
-	
-	// Enable High-true pulses
-	// ELSB = 1, ELSA = 0
-	//INSERT CODE HERE
-	
-	// Enable hardware trigger from FTM2
-	//INSERT CODE HERE
-	
-	
-	// Don't enable interrupts yet (disable)
-	//INSERT CODE HERE
-	//FTM2_SC &= ~FTM_SC_TOIE_MASK;
+	//Set the overflow rate
+	// 10us / T_clk = cycles per 10 us
+	FTM2->MOD = (DEFAULT_SYSTEM_CLOCK)/1000000;
 	
 	// No prescalar, system clock
-	//INSERT CODE HERE
-	FTM2_SC = FTM_SC_PS(0);
+	FTM2_SC &= ~FTM_SC_CLKS_MASK;
+	FTM2_SC |= FTM_SC_CLKS(1);
+	FTM2_SC &= ~FTM_SC_PS_MASK;
+	FTM2_SC |= FTM_SC_PS(0);
 	
 	// Set up interrupt
-	//INSERT CODE HERE
 	NVIC_EnableIRQ(FTM2_IRQn);
+	FTM2_SC |= FTM_SC_TOIE_MASK;
 	
 	return;
 }
@@ -282,6 +282,16 @@ void init_GPIO(void){
 	LED_Init();
 	
 	// Init GPIO for CLK, SI signals
+	// Enable Clock
+	SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK;
+	SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK;
+	
+	// Set MUX
+	PORTB_PCR9 |= PORT_PCR_MUX(1);
+	PORTB_PCR23 |= PORT_PCR_MUX(1);
+	
+	// Set GPIO for output
+	GPIOB_PDDR |= (1 << CLK_PIN_NUM) | (1 << SI_PIN_NUM);
 	
 	return;
 }
