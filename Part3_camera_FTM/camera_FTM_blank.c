@@ -111,8 +111,7 @@ int main(void)
 /* ADC0 Conversion Complete ISR  */
 void ADC0_IRQHandler(void) {
 	// Reading ADC0_RA clears the conversion complete flag
-	ADC0VAL = ADC1_RA;
-	
+	ADC0VAL = ADC0_RA;
 }
 
 /* 
@@ -144,6 +143,10 @@ void FTM2_IRQHandler(void){ //For FTM timer
 		if (!clkval) {	// check for falling edge
 			// ADC read (note that integer division is 
 			//  occurring here for indexing the array)
+			
+			//we polling now boiz
+			ADC0_SC1A = ADC0_SC1A;
+			while(!(ADC0_SC1A & ADC_SC1_COCO_MASK));
 			line[pixcnt/2] = ADC0VAL;
 		}
 		pixcnt += 1;
@@ -153,6 +156,8 @@ void FTM2_IRQHandler(void){ //For FTM timer
 		} else if (pixcnt == 1) {
 			GPIOB_PCOR |= (1 << SI_PIN_NUM); // SI = 0
 			// ADC read
+			ADC0_SC1A = ADC0_SC1A;
+			while(!(ADC0_SC1A & ADC_SC1_COCO_MASK));
 			line[0] = ADC0VAL;
 		} 
 		pixcnt += 1;
@@ -163,7 +168,6 @@ void FTM2_IRQHandler(void){ //For FTM timer
 		// Disable FTM2 interrupts (until PIT0 overflows
 		//   again and triggers another line capture)
 		//FTM2_SC &= ~FTM_SC_TOIE_MASK;
-	
 	}
 	return;
 }
@@ -307,13 +311,14 @@ void init_ADC0(void) {
 	calib = calib >> 1; calib |= 0x8000;
 	ADC0_PG = calib;
 	
-	// Select hardware trigger.
-	ADC0_SC2 = ADC_SC2_ADTRG_MASK;
+	//no Select hardware trigger.
+	//software trigger
+	ADC0_SC2 = 0;
 	
 	// Set to single ended mode	
 	ADC0_SC1A = ADC_SC1_ADCH(0x0);
 	
-	// Set up FTM2 trigger on ADC0
+	//no Set up FTM2 trigger on ADC0
 	
 	// Enable NVIC interrupt
 	NVIC_EnableIRQ(ADC0_IRQn);
