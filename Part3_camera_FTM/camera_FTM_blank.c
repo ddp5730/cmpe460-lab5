@@ -25,6 +25,7 @@
 #include "MK64F12.h"
 #include "uart.h"
 #include "stdio.h"
+#include "led.h"
 
 // Default System clock value
 // period = 1/20485760  = 4.8814395e-8
@@ -81,13 +82,13 @@ int main(void)
 				GPIOB_PCOR |= (1 << 22);
 				// send the array over uart
 				sprintf(str,"%i\n\r",-1); // start value
-				put(str);
+				uart_put(str);
 				for (i = 0; i < 127; i++) {
 					sprintf(str,"%i\n", line[i]);
-					put(str);
+					uart_put(str);
 				}
 				sprintf(str,"%i\n\r",-2); // end value
-				put(str);
+				uart_put(str);
 				capcnt = 0;
 				GPIOB_PSOR |= (1 << 22);
 			}
@@ -276,18 +277,11 @@ void init_PIT(void){
 */
 void init_GPIO(void){
 	// Enable LED and GPIO so we can see results
-	//INSERT CODE HERE
-	SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTE_MASK;
 	
-	PORTB_PCR22 = PORT_PCR_MUX(1);
-	PORTB_PCR21 = PORT_PCR_MUX(1);
-	PORTE_PCR26 = PORT_PCR_MUX(1);
+	// Init LEDs
+	LED_Init();
 	
-	GPIOB_PDDR |= (1 << 22) | (1 << 21);
-	GPIOE_PDDR |= (1 << 26);
-	
-	GPIOB_PSOR = (1 << 22) | (1 << 21);
-	GPIOE_PSOR = (1 << 26);
+	// Init GPIO for CLK, SI signals
 	
 	return;
 }
