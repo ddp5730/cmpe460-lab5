@@ -87,7 +87,7 @@
     <sActiveDebugView></sActiveDebugView>
     <WindowPosition>
       <length>44</length>
-      <flags>2</flags>
+      <flags>0</flags>
       <showCmd>1</showCmd>
       <MinPosition>
         <xPos>-32000</xPos>
@@ -3523,9 +3523,9 @@
       <ActiveTab>0</ActiveTab>
       <Doc>
         <Name>.\camera_FTM_blank.c</Name>
-        <ColumnNumber>23</ColumnNumber>
-        <TopLine>75</TopLine>
-        <CurrentLine>92</CurrentLine>
+        <ColumnNumber>27</ColumnNumber>
+        <TopLine>92</TopLine>
+        <CurrentLine>117</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>
