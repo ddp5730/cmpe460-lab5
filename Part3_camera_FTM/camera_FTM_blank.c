@@ -89,16 +89,16 @@ int main(void)
 			// Every 2 seconds
 			//if (capcnt >= (2/INTEGRATION_TIME)) {
 			int tempVar = capcnt;
-			if (capcnt >= (500)) {
+			if (capcnt >= (20)) {
 				GPIOB_PCOR |= (1 << 22);
 				// send the array over uart
 				sprintf(str,"%i\n\r",-1); // start value
 				uart_put(str);
 				for (i = 0; i < 127; i++) {
-					sprintf(str,"%i\n", line[i]);
+					sprintf(str,"Pixel: %d\tValue(raw ADC)%i\n\r",i, line[i]);
 					uart_put(str);
 				}
-				sprintf(str,"%i\n\r",-2); // end value
+				sprintf(str,"---------------------------------------------------"); // end value
 				uart_put(str);
 				capcnt = 0;
 				GPIOB_PSOR |= (1 << 22);
