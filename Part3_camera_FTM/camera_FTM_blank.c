@@ -75,8 +75,8 @@ int main(void)
 	
 	uart_init();
 	init_GPIO(); // For CLK and SI output on GPIO
-	init_FTM2(); // To generate CLK, SI, and trigger ADC
 	init_ADC0();
+	init_FTM2(); // To generate CLK, SI, and trigger ADC
 	init_PIT();	// To trigger camera read based on integration time
 	
 	uart_put(NL);
@@ -148,7 +148,7 @@ void FTM2_IRQHandler(void){ //For FTM timer
 			//we polling now boiz
 			ADC0_SC1A = ADC0_SC1A;
 			while(!(ADC0_SC1A & ADC_SC1_COCO_MASK));
-			line[pixcnt/2] = ADC0VAL;
+			line[pixcnt/2] = ADC0_RA;
 		}
 		pixcnt += 1;
 	} else if (pixcnt < 2) {
@@ -159,7 +159,7 @@ void FTM2_IRQHandler(void){ //For FTM timer
 			// ADC read
 			ADC0_SC1A = ADC0_SC1A;
 			while(!(ADC0_SC1A & ADC_SC1_COCO_MASK));
-			line[0] = ADC0VAL;
+			line[0] = ADC0_RA;
 		} 
 		pixcnt += 1;
 	} else {
@@ -168,12 +168,7 @@ void FTM2_IRQHandler(void){ //For FTM timer
 		pixcnt = -2; // reset counter
 		// Disable FTM2 interrupts (until PIT0 overflows
 		//   again and triggers another line capture)
-<<<<<<< HEAD
-		//FTM2_SC &= ~FTM_SC_TOIE_MASK;
-=======
 		FTM2_SC &= ~FTM_SC_TOIE_MASK;
-	
->>>>>>> a411703524220da9e1b6cfc8f033f8d0b445923d
 	}
 	return;
 }
@@ -329,5 +324,5 @@ void init_ADC0(void) {
 	//no Set up FTM2 trigger on ADC0
 	
 	// Enable NVIC interrupt
-	NVIC_EnableIRQ(ADC0_IRQn);
+	//NVIC_EnableIRQ(ADC0_IRQn);
 }
