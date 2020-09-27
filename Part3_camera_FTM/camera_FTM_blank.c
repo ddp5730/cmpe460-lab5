@@ -133,17 +133,13 @@ void FTM2_IRQHandler(void){ //For FTM timer
 		// Clock is high; set low
 		GPIOB_PCOR = (1 << CLK_PIN_NUM);
 		clkval = !clkval;
-		uart_put("Clock High");
 	}
 	else {
 		// Clock is low; set high
 		GPIOB_PSOR = (1 << CLK_PIN_NUM);
 		clkval = !clkval;
-		uart_put("\tClock Low");
-		uart_put(NL);
 	}
 	
-	/*
 	// Line capture logic
 	if ((pixcnt >= 2) && (pixcnt < 256)) {
 		if (!clkval) {	// check for falling edge
@@ -167,11 +163,9 @@ void FTM2_IRQHandler(void){ //For FTM timer
 		pixcnt = -2; // reset counter
 		// Disable FTM2 interrupts (until PIT0 overflows
 		//   again and triggers another line capture)
-		//INSERT CODE HERE
-		FTM2_SC &= ~FTM_SC_TOIE_MASK;
+		//FTM2_SC &= ~FTM_SC_TOIE_MASK;
 	
 	}
-	*/
 	return;
 }
 
@@ -216,15 +210,15 @@ void init_FTM2(){
 	// Disable Write Protection
 	FTM2_MODE |= FTM_MODE_WPDIS_MASK;
 	
-	//divide the input clock down 1
+	//divide the input clock by 1
 	FTM2_SC |= FTM_SC_PS(0);
 	
 	// Initialize the CNT to 0 before writing to MOD
 	FTM2_CNT = FTM_CNT_COUNT(0);
 	
 	//Set the overflow rate
-	// 10us / T_clk = cycles per 10 us
-	FTM2->MOD = (DEFAULT_SYSTEM_CLOCK)/1000000;
+	// Period of 10 us required toggling of 5 us
+	FTM2->MOD = 0.000005*DEFAULT_SYSTEM_CLOCK;
 	
 	// No prescalar, system clock
 	FTM2_SC &= ~FTM_SC_CLKS_MASK;
