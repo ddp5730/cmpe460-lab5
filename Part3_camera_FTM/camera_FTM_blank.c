@@ -111,7 +111,6 @@ int main(void)
 /* ADC0 Conversion Complete ISR  */
 void ADC0_IRQHandler(void) {
 	// Reading ADC0_RA clears the conversion complete flag
-	//INSERT CODE HERE
 	ADC0VAL = ADC1_RA;
 	
 }
@@ -240,7 +239,7 @@ void init_PIT(void){
 	// Setup periodic interrupt timer (PIT)
 	
 	// Enable clock for timers
-	//INSERT CODE HERE
+	SIM_SCGC6 |= SIM_SCGC6_PIT_MASK;
 	
 	// Enable timers to continue in debug mode
 	//INSERT CODE HERE // In case you need to debug
@@ -298,7 +297,6 @@ void init_ADC0(void) {
 	SIM_SCGC6 |= SIM_SCGC6_ADC0_MASK;
 	
 	// Single ended 16 bit conversion, no clock divider
-	//INSERT CODE HERE
 	ADC0_CFG1 = ADC_CFG1_MODE(0x3);
     
 	// Do ADC Calibration for Singled Ended ADC. Do not touch.
@@ -310,20 +308,13 @@ void init_ADC0(void) {
 	ADC0_PG = calib;
 	
 	// Select hardware trigger.
-	//INSERT CODE HERE
 	ADC0_SC2 = ADC_SC2_ADTRG_MASK;
 	
 	// Set to single ended mode	
-	//INSERT CODE HERE
 	ADC0_SC1A = ADC_SC1_ADCH(0x0);
 	
-	
 	// Set up FTM2 trigger on ADC0
-	//INSERT CODE HERE // FTM2 select
-	//INSERT CODE HERE // Alternative trigger en.
-	//INSERT CODE HERE // Pretrigger A
 	
 	// Enable NVIC interrupt
-  //INSERT CODE HERE
 	NVIC_EnableIRQ(ADC0_IRQn);
 }
