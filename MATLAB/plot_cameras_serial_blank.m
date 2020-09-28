@@ -74,32 +74,48 @@ end %plot_cams
 
 function plotdata(trace, cam)
 drawnow;
-subplot(4,2,cam);
+subplot(3,1,cam);
 %figure(figureHandle);
 plot(trace);
+title('Raw Trace');
+ylabel('ADC Output');
+xlabel('Index (x-pos)');
 %set(figureHandle,'Visible','on');
 
 %SMOOTH AND PLOT
 smoothtrace = trace;
-for i = 2:127
+for i = 3:126
     %5-point Averager
-    %INSERT CODE
+    smoothtrace(i) = (trace(i-2) + trace(i-1) + trace(i) + trace(i+1) + trace(i+2))/5;
 end;
-subplot(4,2,cam+2);
+subplot(3,1,cam+1);
 %figure(smoothhand);
 plot(smoothtrace);
+title('5 Point Average Trace');
+ylabel('ADC Output');
+xlabel('Index (x-pos)');
 
 %THRESHOLD
 %calculate 1's and 0's via thresholding
 maxval = max(smoothtrace);
+threshold = 0.5 * maxval;
+bintrace = trace;
 for i = 1:128
     %Edge detection (binary 0 or 1)
-    %INSERT CODE
+    if (trace(i) >= threshold)
+        bintrace(i) = 1;
+    else
+        bintrace(i) = 0;
+    end
 end
 drawnow;
-subplot(4,2,cam+4);
+subplot(3,1,cam+2);
 %figure(binfighand);
 plot(smoothtrace);
+title('Binary Threshold Trace');
+ylabel('Binary Output');
+xlabel('Index (x-pos)');
+drawnow;
 
 end %function
 
