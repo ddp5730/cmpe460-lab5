@@ -77,7 +77,7 @@ drawnow;
 subplot(3,1,cam);
 %figure(figureHandle);
 plot(trace);
-title('Raw Trace');
+title(' Trace');
 ylabel('ADC Output');
 xlabel('Index (x-pos)');
 %set(figureHandle,'Visible','on');
@@ -87,7 +87,7 @@ smoothtrace = trace;
 for i = 3:126
     %5-point Averager
     smoothtrace(i) = (trace(i-2) + trace(i-1) + trace(i) + trace(i+1) + trace(i+2))/5;
-end;
+end
 subplot(3,1,cam+1);
 %figure(smoothhand);
 plot(smoothtrace);
@@ -111,7 +111,7 @@ end
 drawnow;
 subplot(3,1,cam+2);
 %figure(binfighand);
-plot(smoothtrace);
+plot(bintrace);
 title('Binary Threshold Trace');
 ylabel('Binary Output');
 xlabel('Index (x-pos)');

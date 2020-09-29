@@ -108,7 +108,7 @@ int main(void)
 		if (debugcamdata) {
 			// Every 2 seconds
 			//if (capcnt >= (2/INTEGRATION_TIME)) {
-			if (capcnt >= (10)) {
+			if (capcnt >= (20)) {
 				GPIOB_PCOR |= (1 << 22);
 				// send the array over uart
 				sprintf(str,"%i\n\r",-1); // start value
@@ -130,7 +130,7 @@ int main(void)
 } //main
 
 
-/* ADC0 Conversion Complete ISR  */
+/* ADC0 Conversion Complete ISR  */
 void ADC0_IRQHandler(void) {
 	// Reading ADC0_RA clears the conversion complete flag
 	ADC0VAL = ADC0_RA;
