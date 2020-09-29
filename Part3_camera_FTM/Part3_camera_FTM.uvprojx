@@ -49,7 +49,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>p1_timers_and_interrupts</OutputName>
+          <OutputName>Part3_camera_FTM</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
@@ -133,7 +133,7 @@
             <UseExternalTool>0</UseExternalTool>
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
-            <Capability>1</Capability>
+            <Capability>0</Capability>
             <DriverSelection>-1</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
@@ -381,19 +381,9 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
-              <FileName>main_timer_template.c</FileName>
+              <FileName>camera_FTM_blank.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\main_timer_template.c</FilePath>
-            </File>
-            <File>
-              <FileName>uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>uart.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\uart.h</FilePath>
+              <FilePath>.\camera_FTM_blank.c</FilePath>
             </File>
             <File>
               <FileName>led.c</FileName>
@@ -406,14 +396,14 @@
               <FilePath>.\led.h</FilePath>
             </File>
             <File>
-              <FileName>isr.c</FileName>
+              <FileName>uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\isr.c</FilePath>
+              <FilePath>.\uart.c</FilePath>
             </File>
             <File>
-              <FileName>isr.h</FileName>
+              <FileName>uart.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\isr.h</FilePath>
+              <FilePath>.\uart.h</FilePath>
             </File>
           </Files>
         </Group>

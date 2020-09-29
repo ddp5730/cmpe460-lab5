@@ -3,7 +3,7 @@
  * Auto generated Run-Time-Environment Component Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'p1_timers_and_interrupts' 
+ * Project: 'Part3_camera_FTM' 
  * Target:  'Target 1' 
  */
 
