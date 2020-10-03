@@ -7,19 +7,24 @@
  */
 
 #include "MK64F12.h"
+#include "fifo.h"
 #include "uart.h"
 #define BAUD_RATE 9600      //default baud rate 
 #define SYS_CLOCK 20485760 //default system clock (see DEFAULT_SYSTEM_CLOCK  in system_MK64F12.c)
+#define RXB_SIZE 64
+#define TXB_SIZE 64
 
-#define UART_BDL_SIZE 8
+char rx_buf[RXB_SIZE];
+char tx_buf[TXB_SIZE];
 
-#include <stdio.h>
+struct Q rxQ = {rx_buf, RXB_SIZE, 0, 0};
+struct Q txQ = {tx_buf, TXB_SIZE, 0, 0};
 
 void uart_init()
 {
 	//define variables for baud rate and baud rate fine adjust
 	uint16_t ubd, brfa;
-
+	
 	//Enable clock for UART
 	SIM_SCGC4 |= SIM_SCGC4_UART0_MASK;
 	SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK;
@@ -51,7 +56,7 @@ void uart_init()
 	UART0_BDL &= ~UART_BDL_SBR_MASK;
 
 	//distribute this ubd in BDH and BDL
-	UART0_BDH |= UART_BDH_SBR(ubd>>UART_BDL_SIZE);	// Only want 5 MSB of ubd
+	UART0_BDH |= UART_BDH_SBR(ubd>>8);	// Only want 5 MSB of ubd
 	UART0_BDL |= UART_BDL_SBR(ubd); // Only want 8 LSB of ubd
 
 
@@ -64,45 +69,49 @@ void uart_init()
 	UART0_C4 |= UART_C4_BRFA(brfa);
 		
 	//Enable transmitter and receiver of UART
-	UART0_C2 |= UART_C2_TE_MASK;
-	UART0_C2 |= UART_C2_RE_MASK;
-
+	UART0_C2 |= UART_C2_TE_MASK | UART_C2_RE_MASK | UART_C2_TIE_MASK | UART_C2_RIE_MASK;
+	
+	NVIC_EnableIRQ(UART0_RX_TX_IRQn);
 }
 
-uint8_t uart_getchar()
+int uart0_put(char *str)
 {
-	/* Wait until there is space for more data in the receiver buffer*/
-	while (!(UART0_S1 & UART_S1_RDRF_MASK)) {
-		// Do nothing while waiting for RDRF to be set
+	while(*str != 0) 
+	{
+		if(uart0_putchar(*(str++))) return 1;
 	}
-
-	/* Return the 8-bit data from the receiver */
-	return UART0_D;
-
+	return 0;
 }
-
-void uart_putchar(char ch)
+int uart0_get(char **str, int n)
 {
-	/* Wait until transmission of previous bit is complete */
-	while(!(UART0_S1 & UART_S1_TDRE_MASK)) {
-		// Do nothing while waiting for TDRE to be set
+	int i;
+	for(i = 0; i < n; i++)
+	{
+		if(uart0_getchar(*str + i)) return 1;
 	}
-		
-	/* Send the character */
-	UART0_D = (uint8_t) ch;
-
+	return 0;
 }
 
-void uart_putnumU(int i)
+int uart0_putchar(char c)
 {
-	char buf[14];
-	sprintf(buf, "%d", i);
-	uart_put(buf);
+	int r = enQ(&txQ, c);
+	UART0_C2 |= UART_C2_TIE_MASK;
+	return r;
 }
 
-void uart_put(char *ptr_str){
-	/*use putchar to print string*/
-	while (*ptr_str) {
-		uart_putchar(*(ptr_str++));
+int uart0_getchar(char *c)
+{
+	return deQ(&rxQ, c);
+}
+
+void UART0_RX_TX_IRQHandler()
+{
+	if(UART0_S1 & UART_S1_TDRE_MASK)
+	{
+		if(deQ(&txQ, &UART0_D)) UART0_C2 &= ~UART_C2_TIE_MASK;
+	}
+	if(UART0_S1 & UART_S1_RDRF_MASK)
+	{
+		if(enQ(&rxQ, UART0_D)) UART0_C2 &= ~UART_C2_RIE_MASK;
 	}
 }

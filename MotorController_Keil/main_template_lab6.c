@@ -25,7 +25,7 @@ int main(void) {
 	uart_init();
 
 	// Print welcome over serial
-	uart_put("Running... \n\r");
+	uart0_put("Running... \n\r");
 	
 	/* Part 1 - UNCOMMENT THIS
 	// Generate 20% duty cycle at 10kHz
