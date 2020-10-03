@@ -87,7 +87,7 @@ int uart0_get(char **str, int n)
 	int i;
 	for(i = 0; i < n; i++)
 	{
-		if(uart0_getchar(*str + i)) return 1;
+		if(uart0_getchar(*str + i)) return i + 1;
 	}
 	return 0;
 }
