@@ -76,9 +76,10 @@ void uart_init()
 
 int uart0_put(char *str)
 {
+	int i = (int)str;
 	while(*str != 0) 
 	{
-		if(uart0_putchar(*(str++))) return 1;
+		if(uart0_putchar(*(str++))) return (int)str - i;
 	}
 	return 0;
 }
